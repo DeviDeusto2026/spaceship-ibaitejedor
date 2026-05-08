@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject enemigoPrefab;
+    public float tiempoEntreSpawn = 3f;
+    public float radioSpawn = 50f;
+
     void Start()
     {
-        
+        InvokeRepeating("Spawn", 2f, tiempoEntreSpawn);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Spawn()
     {
-        
+        Vector3 posAleatoria = Random.insideUnitSphere * radioSpawn;
+        posAleatoria.y = 0; 
+
+        Instantiate(enemigoPrefab, posAleatoria, Quaternion.identity);
     }
 }
