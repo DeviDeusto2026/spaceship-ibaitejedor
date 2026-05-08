@@ -34,5 +34,12 @@ public class Enemy : MonoBehaviour
                 Destroy(gameObject); 
             }
         }
+
+        if (vida <= 0)
+        {
+            // Buscamos al GameManager y le sumamos uno al contador
+            FindObjectOfType<GameManager>().EnemigoEliminado();
+            Destroy(gameObject);
+        }
     }
 }

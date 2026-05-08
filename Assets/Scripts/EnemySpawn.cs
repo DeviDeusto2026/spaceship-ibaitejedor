@@ -18,4 +18,9 @@ public class EnemySpawn : MonoBehaviour
 
         Instantiate(enemigoPrefab, posAleatoria, Quaternion.identity);
     }
+
+    public void DetenerSpawn()
+    {
+        CancelInvoke("Spawn");
+    }
 }

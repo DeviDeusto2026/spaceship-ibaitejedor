@@ -10,5 +10,11 @@ public class ShipHealth : MonoBehaviour
             Debug.Log("¡GAME OVER!");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        if (collision.gameObject.CompareTag("BossBullet"))
+        {
+            Debug.Log("¡GAME OVER!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
