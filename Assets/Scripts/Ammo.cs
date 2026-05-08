@@ -3,11 +3,10 @@ using UnityEngine;
 public class Ammo : MonoBehaviour
 {
     public float velocidadBala = 50f;
-    public GameObject efectoImpacto; 
 
     void Update()
     {
-        transform.position += transform.forward * velocidadBala * Time.deltaTime;
+        transform.Translate(Vector3.forward * velocidadBala * Time.deltaTime);
 
         Destroy(gameObject, 3f);
     }
@@ -25,10 +24,6 @@ public class Ammo : MonoBehaviour
         {
             Debug.Log("¡Bala impactó en un planeta!");
 
-            if (efectoImpacto != null)
-            {
-                Instantiate(efectoImpacto, transform.position, Quaternion.identity);
-            }
 
             Destroy(gameObject);
 

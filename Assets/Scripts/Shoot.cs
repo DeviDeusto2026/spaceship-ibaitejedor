@@ -15,6 +15,8 @@ public class Shoot : MonoBehaviour
 
     void Disparar()
     {
-        Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
+        GameObject nuevaBala = Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
+        nuevaBala.transform.forward = transform.forward;
+        nuevaBala.transform.Rotate(0, 0, 0);
     }
 }
