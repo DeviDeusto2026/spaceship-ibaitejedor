@@ -22,10 +22,9 @@ public class Boss : MonoBehaviour
     void Start()
     {
         jugador = GameObject.FindGameObjectWithTag("Ship").transform;
-        // Dispara cada X segundos
+        
         InvokeRepeating("Shoot", tiempoDisparo, tiempoDisparo);
 
-        // Al aparecer, buscamos al generador y lo apagamos
         FindObjectOfType<EnemySpawn>().DetenerSpawn();
     }
 

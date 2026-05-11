@@ -3,18 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class ShipHealth : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        // 'other' es el objeto que ha entrado en nuestro espacio
+        if (other.CompareTag("Enemy") || other.CompareTag("BossBullet"))
         {
-            Debug.Log("¡GAME OVER!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+            // El filtro de distancia que pusimos antes sigue siendo buena idea
+            float distancia = Vector3.Distance(transform.position, other.transform.position);
 
-        if (collision.gameObject.CompareTag("BossBullet"))
-        {
-            Debug.Log("¡GAME OVER!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (distancia < 4f)
+            {
+                Debug.Log("¡GAME OVER! Chocaste con: " + other.name);
+                // Reinicia la escena (asegúrate de que el índice sea el correcto o usa el nombre)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 }

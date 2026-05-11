@@ -3,7 +3,7 @@ using UnityEngine;
 public class Shoot : MonoBehaviour
 {
     public GameObject balaPrefab; 
-    public Transform puntoDisparo; // Un objeto vacío en la punta de la nave
+    public Transform puntoDisparo; 
 
     void Update()
     {
