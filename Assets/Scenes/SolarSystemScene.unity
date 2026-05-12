@@ -3038,7 +3038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawn
   enemigoPrefab: {fileID: 1459715188333172812, guid: 44d6ef87d079aae4b8611ec384498f40, type: 3}
-  tiempoEntreSpawn: 3
+  tiempoEntreSpawn: 2
   radioSpawn: 50
 --- !u!4 &1106369079
 Transform:
@@ -4058,7 +4058,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4096,7 +4096,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

@@ -5,12 +5,10 @@ public class Enemy : MonoBehaviour
     public float velocidad = 10f;
     public int vida = 3;
     private Transform jugador;
-    private bool puedeRecibirDano = true; 
-
+    private bool puedeRecibirDano = true;
 
     void Start()
     {
-        
         GameObject playerObj = GameObject.FindGameObjectWithTag("Ship");
         if (playerObj != null) jugador = playerObj.transform;
     }
@@ -26,24 +24,28 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Solo restamos vida si es una bala Y si el enemigo "está listo" para recibir daño
         if (other.CompareTag("Ammo") && puedeRecibirDano)
         {
-            puedeRecibirDano = false; // Cerramos la puerta
+            puedeRecibirDano = false;
 
             vida--;
             Debug.Log("Vida enemiga restante: " + vida);
 
-            Destroy(other.gameObject); // Destruye la bala
+            Destroy(other.gameObject);
 
             if (vida <= 0)
             {
-                FindObjectOfType<GameManager>().EnemigoEliminado();
+                // Buscamos el GameManager
+                GameManager gm = FindObjectOfType<GameManager>();
+                if (gm != null)
+                {
+                    gm.EnemigoEliminado(); // Llama a la función que suma la kill y chequea al jefe
+                }
+
                 Destroy(gameObject);
             }
             else
             {
-                // Espera un suspiro (0.05 segundos) y vuelve a permitir daño
                 Invoke("ResetDano", 0.05f);
             }
         }
@@ -54,5 +56,3 @@ public class Enemy : MonoBehaviour
         puedeRecibirDano = true;
     }
 }
-
-

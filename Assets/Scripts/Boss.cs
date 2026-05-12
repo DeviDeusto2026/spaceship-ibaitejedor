@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Imprescindible para el Slider
+using UnityEngine.UI; 
 
 public class Boss : MonoBehaviour
 {
@@ -11,7 +11,6 @@ public class Boss : MonoBehaviour
     public float amplitudZigZag = 5f;
 
     [Header("UI")]
-    // Si arrastras el objeto aquí funcionará, si no, lo buscará por nombre
     public GameObject barraVidaObjeto;
     private Slider barraSlider;
 
@@ -28,23 +27,19 @@ public class Boss : MonoBehaviour
     {
         vidaActual = vidaMax;
 
-        // 1. Buscamos al jugador por Tag
+        
         GameObject playerObj = GameObject.FindGameObjectWithTag("Ship");
         if (playerObj != null) jugador = playerObj.transform;
 
-        // 2. Lógica para encontrar y activar la barra de vida
         if (barraVidaObjeto == null)
         {
-            // Busca en la jerarquía un objeto que se llame exactamente BossHealth
             barraVidaObjeto = GameObject.Find("BossHealth");
         }
 
         if (barraVidaObjeto != null)
         {
-            // Activamos el objeto (por si estaba desactivado al inicio)
             barraVidaObjeto.SetActive(true);
 
-            // Obtenemos el componente Slider para actualizar el valor
             barraSlider = barraVidaObjeto.GetComponent<Slider>();
             if (barraSlider != null)
             {
@@ -57,7 +52,6 @@ public class Boss : MonoBehaviour
             Debug.LogWarning("No se encontró el objeto BossHealth en la escena.");
         }
 
-        // 3. Iniciamos los disparos
         InvokeRepeating("Disparar", tiempoDisparo, tiempoDisparo);
     }
 
@@ -67,13 +61,11 @@ public class Boss : MonoBehaviour
 
         tiempoLocal += Time.deltaTime;
 
-        // Movimiento hacia el jugador con zigzag
         Vector3 direccion = (jugador.position - transform.position).normalized;
         Vector3 zigzag = transform.right * Mathf.Sin(tiempoLocal * frecuenciaZigZag) * amplitudZigZag;
 
         transform.position += (direccion * velocidadBase + zigzag) * Time.deltaTime;
 
-        // El jefe siempre mira al jugador
         transform.LookAt(jugador);
     }
 
@@ -85,7 +77,6 @@ public class Boss : MonoBehaviour
             Rigidbody rb = bala.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Usamos linearVelocity (o velocity según versión)
                 rb.linearVelocity = puntoDisparo.forward * 15f;
             }
         }
@@ -93,26 +84,24 @@ public class Boss : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Detecta impacto de tu munición
         if (other.CompareTag("Ammo") && puedeRecibirDano)
         {
             puedeRecibirDano = false;
             vidaActual--;
 
-            // Actualizamos la barra visualmente
             if (barraSlider != null) barraSlider.value = vidaActual;
 
-            Destroy(other.gameObject); // Destruye la bala del jugador
-
+            Destroy(other.gameObject); 
             if (vidaActual <= 0)
             {
-                // Al morir, desactivamos la barra y destruimos al jefe
+                GameManager gm = FindObjectOfType<GameManager>();
+                if (gm != null) gm.EnemigoEliminado();
+
                 if (barraVidaObjeto != null) barraVidaObjeto.SetActive(false);
                 Destroy(gameObject);
             }
             else
             {
-                // Pequeño tiempo de invulnerabilidad para no morir de un solo impacto múltiple
                 Invoke("ResetDano", 0.1f);
             }
         }

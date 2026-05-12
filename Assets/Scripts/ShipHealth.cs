@@ -10,11 +10,24 @@ public class ShipHealth : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+
        if( other.gameObject.CompareTag("Ammo") || other.gameObject.CompareTag("BossBullet"))
         {
             return;
         }
         RecibirDano();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Este mensaje saldrá CUALQUIER COSA que toque la nave
+        Debug.Log("Algo ha tocado la nave: " + other.gameObject.name + " con Tag: " + other.tag);
+
+        if (other.CompareTag("BossBullet"))
+        {
+            RecibirDano();
+            Destroy(other.gameObject);
+        }
     }
 
     void RecibirDano()
@@ -26,7 +39,7 @@ public class ShipHealth : MonoBehaviour
         if (vidas <= 0)
         {
             Debug.Log("¡GAME OVER!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("Inicio");
         }
         else
         {
