@@ -1,20 +1,24 @@
 using UnityEngine;
+using UnityEngine.UI; // Imprescindible para el Slider
 
 public class Boss : MonoBehaviour
 {
-    [Header("Estad�sticas")]
-    public int vida = 10;
-    public float velocidadBase = 2f; 
+    [Header("Estadisticas")]
+    public int vidaMax = 10;
+    private int vidaActual;
+    public float velocidadBase = 2f;
     public float frecuenciaZigZag = 2f;
     public float amplitudZigZag = 5f;
+
+    [Header("UI")]
+    // Si arrastras el objeto aquí funcionará, si no, lo buscará por nombre
+    public GameObject barraVidaObjeto;
+    private Slider barraSlider;
 
     [Header("Ataque")]
     public GameObject balaEnemigaPrefab;
     public Transform puntoDisparo;
     public float tiempoDisparo = 1.5f;
-
-    [Header("Spawner")]
-    public GameObject miniNavePrefab;
 
     private Transform jugador;
     private float tiempoLocal;
@@ -22,16 +26,39 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
-        // Buscamos al jugador por el Tag que usaste antes
+        vidaActual = vidaMax;
+
+        // 1. Buscamos al jugador por Tag
         GameObject playerObj = GameObject.FindGameObjectWithTag("Ship");
         if (playerObj != null) jugador = playerObj.transform;
 
-        // CORRECCI�N: El nombre debe coincidir exactamente con el m�todo
-        InvokeRepeating("Disparar", tiempoDisparo, tiempoDisparo);
+        // 2. Lógica para encontrar y activar la barra de vida
+        if (barraVidaObjeto == null)
+        {
+            // Busca en la jerarquía un objeto que se llame exactamente BossHealth
+            barraVidaObjeto = GameObject.Find("BossHealth");
+        }
 
-        // Detenemos el spawn de enemigos peque�os
-        if (FindObjectOfType<EnemySpawn>() != null)
-            FindObjectOfType<EnemySpawn>().DetenerSpawn();
+        if (barraVidaObjeto != null)
+        {
+            // Activamos el objeto (por si estaba desactivado al inicio)
+            barraVidaObjeto.SetActive(true);
+
+            // Obtenemos el componente Slider para actualizar el valor
+            barraSlider = barraVidaObjeto.GetComponent<Slider>();
+            if (barraSlider != null)
+            {
+                barraSlider.maxValue = vidaMax;
+                barraSlider.value = vidaMax;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el objeto BossHealth en la escena.");
+        }
+
+        // 3. Iniciamos los disparos
+        InvokeRepeating("Disparar", tiempoDisparo, tiempoDisparo);
     }
 
     void Update()
@@ -46,7 +73,7 @@ public class Boss : MonoBehaviour
 
         transform.position += (direccion * velocidadBase + zigzag) * Time.deltaTime;
 
-        // El jefe siempre te mira
+        // El jefe siempre mira al jugador
         transform.LookAt(jugador);
     }
 
@@ -54,41 +81,38 @@ public class Boss : MonoBehaviour
     {
         if (balaEnemigaPrefab != null && puntoDisparo != null)
         {
-            // 1. Creamos la bala
             GameObject bala = Instantiate(balaEnemigaPrefab, puntoDisparo.position, puntoDisparo.rotation);
-
-            // 2. Le damos fuerza si tiene Rigidbody
             Rigidbody rb = bala.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.linearVelocity = puntoDisparo.forward * 15f; // 15 es la velocidad
+                // Usamos linearVelocity (o velocity según versión)
+                rb.linearVelocity = puntoDisparo.forward * 15f;
             }
         }
     }
 
-    // CORRECCI�N: Usamos Trigger porque as� configuramos el juego antes
     private void OnTriggerEnter(Collider other)
     {
+        // Detecta impacto de tu munición
         if (other.CompareTag("Ammo") && puedeRecibirDano)
         {
             puedeRecibirDano = false;
-            vida--;
-            Debug.Log("Vida del Jefe: " + vida);
+            vidaActual--;
 
-            Destroy(other.gameObject); // Destruye tu bala
+            // Actualizamos la barra visualmente
+            if (barraSlider != null) barraSlider.value = vidaActual;
 
-            // Suelta una mini nave de refuerzo
-            if (miniNavePrefab != null)
-                Instantiate(miniNavePrefab, transform.position + Vector3.back * 2f, Quaternion.identity);
+            Destroy(other.gameObject); // Destruye la bala del jugador
 
-            if (vida <= 0)
+            if (vidaActual <= 0)
             {
-                Debug.Log("�JEFE DERROTADO!");
-                // Aqu� podr�as llamar a una pantalla de victoria
+                // Al morir, desactivamos la barra y destruimos al jefe
+                if (barraVidaObjeto != null) barraVidaObjeto.SetActive(false);
                 Destroy(gameObject);
             }
             else
             {
+                // Pequeño tiempo de invulnerabilidad para no morir de un solo impacto múltiple
                 Invoke("ResetDano", 0.1f);
             }
         }
