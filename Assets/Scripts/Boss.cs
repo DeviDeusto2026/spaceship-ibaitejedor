@@ -27,29 +27,25 @@ public class Boss : MonoBehaviour
     {
         vidaActual = vidaMax;
 
-        
         GameObject playerObj = GameObject.FindGameObjectWithTag("Ship");
         if (playerObj != null) jugador = playerObj.transform;
 
-        if (barraVidaObjeto == null)
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
         {
-            barraVidaObjeto = GameObject.Find("BossHealth");
-        }
-
-        if (barraVidaObjeto != null)
-        {
-            barraVidaObjeto.SetActive(true);
-
-            barraSlider = barraVidaObjeto.GetComponent<Slider>();
-            if (barraSlider != null)
+            Transform barraTransform = canvas.transform.Find("BossHealth");
+            if (barraTransform != null)
             {
-                barraSlider.maxValue = vidaMax;
-                barraSlider.value = vidaMax;
+                barraVidaObjeto = barraTransform.gameObject;
+                barraVidaObjeto.SetActive(true); 
+
+                barraSlider = barraVidaObjeto.GetComponent<Slider>();
+                if (barraSlider != null)
+                {
+                    barraSlider.maxValue = vidaMax;
+                    barraSlider.value = vidaMax;
+                }
             }
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el objeto BossHealth en la escena.");
         }
 
         InvokeRepeating("Disparar", tiempoDisparo, tiempoDisparo);

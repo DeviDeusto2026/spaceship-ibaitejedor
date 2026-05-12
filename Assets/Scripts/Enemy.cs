@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
                 GameManager gm = FindObjectOfType<GameManager>();
                 if (gm != null)
                 {
-                    gm.EnemigoEliminado(); // Llama a la función que suma la kill y chequea al jefe
+                    gm.EnemigoEliminado(); 
                 }
 
                 Destroy(gameObject);
