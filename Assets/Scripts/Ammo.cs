@@ -22,7 +22,7 @@ public class Ammo : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Planet"))
         {
-            Debug.Log("¡Bala impactó en un planeta!");
+            //Debug.Log("¡Bala impactó en un planeta!");
 
 
             Destroy(gameObject);

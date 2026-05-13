@@ -35,7 +35,6 @@ public class Enemy : MonoBehaviour
 
             if (vida <= 0)
             {
-                // Buscamos el GameManager
                 GameManager gm = FindObjectOfType<GameManager>();
                 if (gm != null)
                 {

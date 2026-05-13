@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4772e00ddd194184e89852939f5a35e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  velocidad: 10
+  velocidad: 15
   vida: 3
 --- !u!54 &5702748657232734484
 Rigidbody:

@@ -5,19 +5,16 @@ public class CameraMovement : MonoBehaviour
 {
     public int movSpeed = 30;
     private Rigidbody rb;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            rb.useGravity = false; // Sin gravedad en el espacio
-            rb.isKinematic = false; // Queremos que use físicas para el freno
+            rb.useGravity = false;
+            rb.isKinematic = false; 
         }
     }
-
-    // Update is called once per frame
     void Update()
     {
         move();
